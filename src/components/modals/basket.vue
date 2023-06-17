@@ -7,53 +7,24 @@
 			</div>
 			<!-- /.modal-header -->
 			<div class="modal-body">
-				<div class="food-row">
-					<span class="food-name">Ролл угорь стандарт</span>
-					<strong class="food-price">250 ₽</strong>
-					<div class="food-counter">
-						<button class="counter-button">-</button>
-						<span class="counter">1</span>
-						<button class="counter-button">+</button>
-					</div>
-				</div>
 				<!-- /.foods-row -->
-				<div class="food-row">
-					<span class="food-name">Ролл угорь стандарт</span>
-					<strong class="food-price">250 ₽</strong>
+				<div class="food-row" v-for="(product, index) in basketProducts" :key="product.id + index">
+					<span class="food-name">{{ product.name }}</span>
+					<strong class="food-price">{{ product.price }} ₽</strong>
 					<div class="food-counter">
-						<button class="counter-button">-</button>
-						<span class="counter">1</span>
-						<button class="counter-button">+</button>
-					</div>
-				</div>
-				<!-- /.foods-row -->
-				<div class="food-row">
-					<span class="food-name">Ролл угорь стандарт</span>
-					<strong class="food-price">250 ₽</strong>
-					<div class="food-counter">
-						<button class="counter-button">-</button>
-						<span class="counter">1</span>
-						<button class="counter-button">+</button>
-					</div>
-				</div>
-				<!-- /.foods-row -->
-				<div class="food-row">
-					<span class="food-name">Ролл угорь стандарт</span>
-					<strong class="food-price">250 ₽</strong>
-					<div class="food-counter">
-						<button class="counter-button">-</button>
-						<span class="counter">1</span>
-						<button class="counter-button">+</button>
+						<button class="counter-button" @click="minus(product)">-</button>
+						<span class="counter">{{ product.quantity }}</span>
+						<button class="counter-button" @click="plus(product)">+</button>
 					</div>
 				</div>
 				<!-- /.foods-row -->
 			</div>
 			<!-- /.modal-body -->
 			<div class="modal-footer">
-				<span class="modal-pricetag">1250 ₽</span>
+				<span class="modal-pricetag">{{ totalPrice }} ₽</span>
 				<div class="footer-buttons">
-					<button class="button button-primary">Оформить заказ</button>
-					<button class="button clear-cart">Отмена</button>
+					<button class="button button-primary" @click="$emit('closeModal')">Оформить заказ</button>
+					<button class="button clear-cart" @click="$emit('closeModal')">Отмена</button>
 				</div>
 			</div>
 			<!-- /.modal-footer -->
@@ -61,3 +32,32 @@
 		<!-- /.modal-dialog -->
 	</div>
 </template>
+
+<script>
+	import { mapGetters, mapActions } from 'vuex';
+	export default{
+		data(){
+			return{
+			} 
+		},
+		computed:{
+			...mapGetters(['basketProducts']),
+			totalPrice(){
+				let totalPrice = 0
+				this.basketProducts.forEach(item => {
+					totalPrice += item.price * item.quantity
+				});
+				return totalPrice
+			},
+		},
+		methods: {
+			...mapActions(['minusQuantity', 'plusQuantity']),
+			minus(product) {
+				this.minusQuantity(product)
+			},
+			plus(product) {
+				this.plusQuantity(product)
+			}
+		}
+	}
+</script>

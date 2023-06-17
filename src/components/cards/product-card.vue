@@ -11,7 +11,7 @@
             </div>
             <!-- /.card-info -->
             <div class="card-buttons">
-                <button class="button button-primary button-add-cart">
+                <button class="button button-primary button-add-cart" @click="addProductToBasket(product)">
                     <span class="button-card-text">В корзину</span>
                     <span class="button-cart-svg"></span>
                 </button>
@@ -23,11 +23,18 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex';
     export default{
         props: {
             product: {
                 required: true,
                 type: Object
+            }
+        },
+        methods:{
+            ...mapActions(['addToBasket']),
+            addProductToBasket(product){
+                this.addToBasket(product)
             }
         }
     }
